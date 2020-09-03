@@ -46,7 +46,7 @@ class BucketDetail(APIView):
         try:
             Bucket.objects.get(pk=id)
             bucket_data = JSONParser().parse(request)
-            data = BucketSerializer(bucket_data, data=bucket_data)
+            data = BucketSerializer(data=bucket_data)
             if data.is_valid():
                 data.save()
                 return Response({'message': 'Bucket successfully Updated'}, status=200)
@@ -102,6 +102,20 @@ class TodoDetail(APIView):
             Todo.objects.get(pk=id)
             todo_data = JSONParser().parse(request)
             data = TodoSerializer(todo_data, data=todo_data)
+            if data.is_valid():
+                data.save()
+                return Response({'message': 'Todo successfully Updated'}, status=200)
+            else:
+                return Response(data.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Todo.DoesNotExist:
+            return Response({'message': 'The Todo does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class TodoDoneToggle(APIView):
+    def get(self, request, id):
+        try:
+            todo = Todo.objects.get(pk=id)
+            data = TodoSerializer(todo, data={"done": False if todo.done else True}, partial=True)
             if data.is_valid():
                 data.save()
                 return Response({'message': 'Todo successfully Updated'}, status=200)

@@ -9,6 +9,14 @@ class Bucket(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def count(self):
+        return len(Todo.objects.filter(bucket_id=self.id))
+
+    @property
+    def done(self):
+        return len(Todo.objects.filter(bucket_id=self.id, done=True))
+
 
 class Todo(models.Model):
     bucket_id = models.ForeignKey(Bucket, on_delete=models.CASCADE)

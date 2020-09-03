@@ -6,7 +6,7 @@ from .models import Bucket, Todo
 class BucketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bucket
-        fields = ('id', 'name', 'created_at', 'color')
+        fields = ('id', 'name', 'created_at', 'color', 'count', 'done')
 
 
 class TodoSerializer(serializers.ModelSerializer):
